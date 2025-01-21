@@ -1,0 +1,23 @@
+.custom-h2 {
+    font-size: 2rem;
+    font-weight: bold;
+    color: transparent;
+    background: linear-gradient(90deg, #FF5733, #FF8D1A, #FFD700); /* Gradient text color */
+    -webkit-background-clip: text;
+    background-clip: text;
+    position: relative;
+    padding: 0.25rem 0;
+    
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2); /* Text shadow for depth */
+    /* margin-bottom: 0.5rem; */
+}
+
+.custom-h2::after {
+    content: "Flyaway"; /* Text outline effect */
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: -1;
+    color: #22487F; /* Outline color */
+    transform: translate(2px, 2px); /* Offset for outline */
+}

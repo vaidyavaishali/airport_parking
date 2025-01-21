@@ -1,0 +1,40 @@
+input::placeholder {
+    color: #d1d5db; /* Light gray color for the placeholder */
+}
+/* Base styling for TimePickerComponent */
+.time-picker {
+    width: 100%;
+    font-size: 0.875rem; /* Matches text-sm */
+    padding: 0.5rem; /* Matches Tailwind's `py-2` */
+    border: 1px solid #d1d5db; /* Matches Tailwind's `border-gray-300` */
+    border-radius: 0.375rem; /* Matches Tailwind's `rounded-md` */
+    background-color: white; /* Ensures white background */
+    color: #000; /* Black text for readability */
+    appearance: none;
+    outline: none;
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+/* Focus state for TimePickerComponent */
+.time-picker:focus {
+    border-color: #f97316; /* Matches Tailwind's `focus:border-orange-400` */
+    box-shadow: 0 0 0 3px rgba(249, 115, 22, 0.5); /* Matches Tailwind's `focus:ring-orange-400` */
+    background-color: white; /* Ensures background remains white */
+}
+
+/* Disabled state for TimePickerComponent */
+.time-picker:disabled {
+    background-color: #f9fafb; /* Matches Tailwind's `bg-gray-100` for disabled */
+    color: #6b7280; /* Matches Tailwind's `text-gray-400` */
+    cursor: not-allowed;
+}
+
+/* Hover state for better feedback */
+.time-picker:hover {
+    border-color: #e5e7eb; /* Matches Tailwind's `hover:border-gray-300` */
+}
+
+/* Placeholder text */
+.time-picker::placeholder {
+    color: #6b7280; /* Matches Tailwind's `text-gray-400` */
+}

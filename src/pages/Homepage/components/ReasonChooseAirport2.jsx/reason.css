@@ -1,0 +1,16 @@
+/* Define the keyframes separately */
+@keyframes flip-with-scale {
+    0% {
+      transform: perspective(400px) scaleX(1);
+    }
+    100% {
+      transform: perspective(400px) scaleX(-1);
+      color: #ffa500;
+    }
+  }
+  
+  /* Apply the animation to the class */
+  .animate-flip-with-scale {
+    animation: flip-with-scale 1s ease-in-out; /* Adjust duration and timing function as needed */
+  }
+  
