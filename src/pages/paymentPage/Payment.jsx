@@ -48,7 +48,7 @@ const PaymentPage = () => {
 
   const firstName = bookingData.contactData?.firstName || "";
   const lastName = bookingData.contactData?.lastName || "";
-  const totalAmount = 0.1 || "0.00";
+  const totalAmount = "$"+bookingData.payment.pricing || "0.00";
 
   return (
     <div className="min-h-screen bg-gray-100 flex items-center justify-center py-10 px-4">
@@ -67,7 +67,7 @@ const PaymentPage = () => {
           </div>
           <div className="flex justify-between mb-4">
             <span className="text-gray-700 font-semibold">Total Price</span>
-            <span className="text-gray-700 text-xl font-bold">Rs. {totalAmount}</span>
+            <span className="text-gray-700 text-xl font-bold">{totalAmount}</span>
           </div>
         </div>
 

@@ -4,6 +4,8 @@ import { FaPlus, FaEdit, FaTrash } from "react-icons/fa";
 import axios from "axios";
 import Modal from "react-modal"; // Install React Modal using npm
 import AddParkingSpace from "../PakingSpace/AddParking";
+import { useAuth } from "../../contextApi/userContext";
+import { useNavigate } from "react-router-dom";
 
 const ParkingSpaceManagement = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -28,19 +30,31 @@ const ParkingSpaceManagement = () => {
   const closeModal = () => setIsModalOpen(false);
 
   // Fetch all parking spaces on component mount
+  const fetchParkingSpaces = async () => {
+    try {
+      const response = await axios.get("http://localhost:4000/get-all-parking-spaces");
+      setParkingSpaces(response.data);
+    } catch (error) {
+      console.error("Error fetching parking spaces:", error);
+    }
+  };
   useEffect(() => {
-    const fetchParkingSpaces = async () => {
-      try {
-        const response = await axios.get("http://localhost:4000/get-all-parking-spaces");
-        setParkingSpaces(response.data);
-      } catch (error) {
-        console.error("Error fetching parking spaces:", error);
-      }
-    };
-
     fetchParkingSpaces();
   }, []); // Empty array ensures the effect runs only once on component mount
 
+
+  const router = useNavigate();
+  const [userauth] = useAuth();
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
+
+  useEffect(() => {
+    if (!userauth || !userauth.token) {
+      router("/login"); // Redirect to login page if not authenticated
+    } else {
+      fetchParkingSpaces();
+    }
+  }, [userauth, router]);
   // Handle Delete
   const handleDelete = async (id) => {
     try {

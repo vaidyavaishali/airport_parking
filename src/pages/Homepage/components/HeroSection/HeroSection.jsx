@@ -109,9 +109,7 @@ const HeroSection = () => {
   useEffect(() => {
     const uniqueCompanyNames = [...new Set(airportData.map((item) => item.airportCompany))];
     setAirportCompanyName(uniqueCompanyNames);
-
-    console.log(airportCompanyName)
-  }, [airportCompanyName, setAirportCompanyName])
+  }, [airportData])
 
 
   return (

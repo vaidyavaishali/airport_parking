@@ -1,8 +1,23 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { FaCar, FaMoneyBillWave, FaBell, FaEdit, FaTrash, FaPlus } from "react-icons/fa";
 import Sidebar from "../Sidebar";
+import { useAuth } from "../contextApi/userContext";
+import { useNavigate } from "react-router-dom";
 
 const Dashboard = () => {
+  
+  const router = useNavigate();
+  const [userauth] = useAuth();
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
+
+  useEffect(() => {
+    if (!userauth || !userauth.token) {
+      router("/login"); // Redirect to login page if not authenticated
+    } else {
+      // fetchParkingSpaces();
+    }
+  }, [userauth, router]);
   return (
     <Sidebar>
       {/* Dashboard Overview */}
