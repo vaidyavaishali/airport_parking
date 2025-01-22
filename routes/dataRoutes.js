@@ -1,7 +1,7 @@
 import express from "express";
 import { createParkingSpace, deleteParkingSpace, getAllParkingSpaces, getParkingSpaceByAirportCompany, getParkingSpaceById, updateParkingSpace } from "../controller/parkingSpaceController.js";
 import {upload} from "../middlware/multer.js";
-import { createBooking, deleteBooking, getAllBooking, getBookingByBookingId } from "../controller/bookingController.js";
+import { cancelBooking, createBooking, deleteBooking, getAllBooking, getBookingByBookingId } from "../controller/bookingController.js";
 import { createOrder } from "../controller/paymentController.js";
 // import { checkStatus, newPayment } from "../controller/paymentController.js";
 const dataroute = express.Router();
@@ -18,7 +18,7 @@ dataroute.post("/create-booking", createBooking);
 dataroute.get("/get-booking-by-id/:bookingId", getBookingByBookingId);
 dataroute.get("/get-booking", getAllBooking);
 dataroute.delete("/delete-booking/:id", deleteBooking);
-
+dataroute.patch('/booking/cancel/:id', cancelBooking);
 
 dataroute.post('/payment', createOrder);
 // dataroute.post("/capture-payment", capturePayment);

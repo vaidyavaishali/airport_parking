@@ -25,7 +25,7 @@ const generateBookingId = async () => {
 // Create new booking
 export const createBooking = async (req, res) => {
     try {
-        const { contactData, flightDetails, vehicleDetails, additionalOptions, parkingId, payment } = req.body;
+        const { contactData, flightDetails, vehicleDetails, additionalOptions, parkingId, payment, cancelled } = req.body;
         console.log(req.body)
         const parkingSpace = await parkingSpaceModel.findById(parkingId);
         if (!parkingSpace || parkingSpace.occupied >= parkingSpace.capacity) {
@@ -36,7 +36,7 @@ export const createBooking = async (req, res) => {
         const bookingId = await generateBookingId();
 
         // Create booking
-        const newBooking = new Booking({ bookingId, contactData, flightDetails, vehicleDetails, additionalOptions, parkingId, payment });
+        const newBooking = new Booking({ bookingId, contactData, flightDetails, vehicleDetails, additionalOptions, parkingId, payment,cancelled });
         const savedBooking = await newBooking.save();
 
         // Update parking space occupancy
@@ -69,14 +69,7 @@ export const getBookingByBookingId = async (req, res) => {
 };
 export const getAllBooking = async (req, res) => {
     try {
-        // const { bookingId } = req.params;  // Get booking ID from the route parameters
-        // console.log(bookingId)
-        // Find the booking by its ID
         const booking = await bookingModel.find(); // Populating the parkingId to get related parking details
-
-        // If booking is not found
-
-
         res.status(200).json({ success: true, data: booking });
     } catch (error) {
         res.status(500).json({ success: false, message: "Error fetching booking", error });
@@ -99,3 +92,61 @@ export const deleteBooking = async (req, res) => {
     res.status(500).json({ message: err.message });
   }
 }
+
+// Cancel a booking by ID
+export const cancelBooking = async (req, res) => {
+    try {
+        const { id } = req.params; // Booking ID from the route parameters
+        const booking = await bookingModel.findById(id);
+
+        if (!booking) {
+            return res.status(404).json({ success: false, message: "Booking not found" });
+        }
+
+        if (booking.cancelled) {
+            return res.status(400).json({ success: false, message: "Booking is already canceled" });
+        }
+
+        // Mark the booking as canceled
+        booking.cancelled = true;
+        await booking.save();
+
+        // Update the parking space occupancy
+        const parkingSpace = await parkingSpaceModel.findById(booking.parkingId);
+        if (parkingSpace && parkingSpace.occupied > 0) {
+            parkingSpace.occupied -= 1;
+            await parkingSpace.save();
+        }
+
+        res.status(200).json({ success: true, message: "Booking canceled successfully", data: booking });
+    } catch (error) {
+        res.status(500).json({ success: false, message: "Error canceling booking", error });
+    }
+};
+
+// Update payment status
+export const updatePaymentStatus = async (req, res) => {
+    try {
+        const { id } = req.params; // Booking ID from the route parameters
+        const { paymentCompleted } = req.body; // Payment status from the request body
+
+        if (typeof paymentCompleted !== "boolean") {
+            return res.status(400).json({ success: false, message: "Invalid payment status" });
+        }
+
+        // Find the booking by ID and update the payment status
+        const booking = await bookingModel.findByIdAndUpdate(
+            id,
+            { "payment.paymentCompleted": paymentCompleted },
+            { new: true } // Return the updated document
+        );
+
+        if (!booking) {
+            return res.status(404).json({ success: false, message: "Booking not found" });
+        }
+
+        res.status(200).json({ success: true, message: "Payment status updated successfully", data: booking });
+    } catch (error) {
+        res.status(500).json({ success: false, message: "Error updating payment status", error });
+    }
+};

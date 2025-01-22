@@ -32,10 +32,14 @@ const BookingSchema = new mongoose.Schema({
     },
     payment: {
         pricing: { type: String },
-        paymentCompleted: { type: String, default: "pending" }
+        paymentCompleted: { type: String, default: "Pending" }
     },
     parkingId: { type: mongoose.Schema.Types.ObjectId, ref: "ParkingSpace" },
     createdAt: { type: Date, default: Date.now },
+    cancelled :{
+        type: Boolean,
+        default: false
+    }
 });
 
 export default mongoose.model("Booking", BookingSchema);

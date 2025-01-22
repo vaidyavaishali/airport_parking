@@ -1,6 +1,7 @@
 import express from "express";
 import got from "got"; // Ensure `got` is installed and imported
 import Payment from "../models/paymentModel.js";
+import bookingModel from "../models/bookingModel.js";
 
 const getAccessToken = async () => {
     try {
@@ -61,12 +62,34 @@ export const createOrder = async (req, res) => {
             json: payload,
             responseType: "json", // Ensure response is parsed as JSON
         });
+        const orderDetails = response.body;
+        console.log("PayPal API Response:", orderDetails);
 
+        // Update booking's payment status if the order is successfully created
+        if (orderDetails && orderDetails.status === "CREATED") {
+            const bookingId = req.body.bookingId;
+            const updatedBooking = await bookingModel.findOneAndUpdate(
+                { bookingId }, // Find by booking ID
+                { "payment.paymentCompleted": true }, // Set payment status to completed
+                { new: true } // Return updated document
+            );
+
+            if (!updatedBooking) {
+                return res.status(404).json({
+                    message: "Booking not found to update payment status",
+                });
+            }
+
+            console.log("Booking payment status updated:", updatedBooking);
+        }
         // Respond with the order details
+        console.log("PayPal API Response:", orderDetails);
         return res.status(200).json({
             message: "Order created successfully",
-            order: response.body, // Send the order details back to the client
+            order: orderDetails, // Send the order details back to the client
         });
+
+        
     } catch (error) {
         // Log the full error response
         if (error.response) {
@@ -81,3 +104,5 @@ export const createOrder = async (req, res) => {
         });
     }
 };
+
+

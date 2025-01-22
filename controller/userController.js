@@ -1,5 +1,5 @@
-import { compare, hashpassword } from "../middleware/helper.js";
-import userModel from "../models/userModel.js";
+import { compare, hashpassword } from "../middlware/helper.js";
+import userModel from "../Models/userModel.js";
 
 export const register = async (req, res) => {
   try {
@@ -32,8 +32,11 @@ export const login = async (req, res) => {
       return res.status(400).send("User does not exist, please sign up first");
     } else {
       const match = await compare(password, user.password);
+      console.log(match)
       if (match) {
         const token = await user.generatetoken();
+        console.log(token)
+
         res.status(200).send({ token, user });
       }else{
       return res.status(400).send({message:"plz check your credentials"});
