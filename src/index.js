@@ -18,18 +18,18 @@ AOS.init();
 // document.addEventListener("contextmenu", (event) => event.preventDefault());
 
 // Disable common developer tool shortcuts
-document.addEventListener("keydown", (event) => {
-  // F12 or Ctrl+Shift+I (Inspect Tools)
-  if (
-    event.key === "F12" ||
-    (event.ctrlKey && event.shiftKey && event.key === "I") ||
-    (event.ctrlKey && event.key === "U") || // Ctrl+U (View Source)
-    (event.ctrlKey && event.shiftKey && event.key === "J") // Ctrl+Shift+J (Console)
-  ) {
-    event.preventDefault();
-    // alert("Inspect Element is disabled.");
-  }
-});
+// document.addEventListener("keydown", (event) => {
+//   // F12 or Ctrl+Shift+I (Inspect Tools)
+//   if (
+//     event.key === "F12" ||
+//     (event.ctrlKey && event.shiftKey && event.key === "I") ||
+//     (event.ctrlKey && event.key === "U") || // Ctrl+U (View Source)
+//     (event.ctrlKey && event.shiftKey && event.key === "J") // Ctrl+Shift+J (Console)
+//   ) {
+//     event.preventDefault();
+//     // alert("Inspect Element is disabled.");
+//   }
+// });
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
